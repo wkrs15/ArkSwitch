@@ -4,7 +4,7 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         Style="{StaticResource WindowWin10}"
         Title="ArkSwitch · 方舟切服 / 账号切换"
-        Width="440" Height="250"
+        Width="440" Height="205"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         FontFamily="Microsoft YaHei UI">
@@ -52,47 +52,37 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- 账号选择 + 管理 -->
+            <!-- 游戏目录 + 账号管理 -->
             <DockPanel Grid.Row="0">
-            <Button DockPanel.Dock="Right" Content="账号管理" Width="88" Height="30"
-                    Click="ManageAccounts_Click"/>
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock Text="账号" VerticalAlignment="Center" Margin="2,0,0,0"/>
-                <ComboBox x:Name="AccountCombo" Width="220" Margin="14,0,0,0"
-                          VerticalAlignment="Center"/>
-            </StackPanel>
-        </DockPanel>
+                <Button DockPanel.Dock="Right" Content="账号管理" Width="88" Height="30"
+                        Click="ManageAccounts_Click"/>
+                <Button DockPanel.Dock="Right" Content="浏览..." Width="64" Height="30"
+                        Margin="0,0,10,0" Click="BrowseGameDir_Click"/>
+                <TextBlock DockPanel.Dock="Left" Text="游戏目录" VerticalAlignment="Center" Margin="2,0,0,0"/>
+                <TextBox x:Name="GameDirBox" IsReadOnly="True" Height="30" Margin="12,0,0,0"
+                         VerticalContentAlignment="Center" FontSize="11.5"
+                         hc:InfoElement.Placeholder="未设置，启动游戏时会自动选择"/>
+            </DockPanel>
 
-        <!-- 游戏目录 -->
-        <DockPanel Grid.Row="1" Margin="0,12,0,0">
-            <Button DockPanel.Dock="Right" Content="浏览..." Width="64" Height="28"
-                    Click="BrowseGameDir_Click"/>
-            <TextBlock DockPanel.Dock="Left" Text="游戏目录" VerticalAlignment="Center" Margin="2,0,0,0"/>
-            <TextBox x:Name="GameDirBox" IsReadOnly="True" Height="28" Margin="12,0,0,0"
-                     VerticalContentAlignment="Center" FontSize="11.5"
-                     hc:InfoElement.Placeholder="未设置，启动游戏时会自动选择"/>
-        </DockPanel>
+            <!-- 双服启动 -->
+            <UniformGrid Grid.Row="1" Columns="2" Margin="0,12,0,0">
+                <Button x:Name="OfficialBtn" Style="{StaticResource CardButton}" Height="58"
+                        Margin="0,0,6,0" Click="OfficialBtn_Click">
+                    <TextBlock Text="启动官服" FontSize="16" FontWeight="Bold"
+                               Foreground="{DynamicResource PrimaryTextBrush}"/>
+                </Button>
+                <Button x:Name="BilibiliBtn" Style="{StaticResource CardButton}" Height="58"
+                        Margin="6,0,0,0" Click="BilibiliBtn_Click">
+                    <TextBlock Text="启动B服" FontSize="16" FontWeight="Bold"
+                               Foreground="{DynamicResource PrimaryTextBrush}"/>
+                </Button>
+            </UniformGrid>
 
-        <!-- 双服启动 -->
-        <UniformGrid Grid.Row="2" Columns="2" Margin="0,12,0,0">
-            <Button x:Name="OfficialBtn" Style="{StaticResource CardButton}" Height="58"
-                    Margin="0,0,6,0" Click="OfficialBtn_Click">
-                <TextBlock Text="启动官服" FontSize="16" FontWeight="Bold"
-                           Foreground="{DynamicResource PrimaryTextBrush}"/>
-            </Button>
-            <Button x:Name="BilibiliBtn" Style="{StaticResource CardButton}" Height="58"
-                    Margin="6,0,0,0" Click="BilibiliBtn_Click">
-                <TextBlock Text="启动B服" FontSize="16" FontWeight="Bold"
-                           Foreground="{DynamicResource PrimaryTextBrush}"/>
-            </Button>
-        </UniformGrid>
-
-        <!-- 从官方 CDN 更新切服文件 -->
-        <Button x:Name="UpdatePayloadBtn" Grid.Row="3" Content="更新切服文件（官方 CDN）"
-                Height="30" Margin="0,12,0,0" Click="UpdatePayload_Click"/>
+            <!-- 从官方 CDN 更新切服文件 -->
+            <Button x:Name="UpdatePayloadBtn" Grid.Row="2" Content="更新切服文件（官方 CDN）"
+                    Height="30" Margin="0,12,0,0" Click="UpdatePayload_Click"/>
         </Grid>
 
         <StackPanel hc:Growl.GrowlParent="True" hc:Growl.Token="ArkSwitchMain"

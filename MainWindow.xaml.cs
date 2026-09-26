@@ -15,7 +15,6 @@ public partial class MainWindow : HandyControl.Controls.Window
     public MainWindow()
     {
         InitializeComponent();
-        LoadAccounts();
         RefreshGameDir();
 
         Loaded += OnLoaded;
@@ -64,51 +63,6 @@ public partial class MainWindow : HandyControl.Controls.Window
         {
             _payloadBusy = false;
         }
-    }
-
-    private void LoadAccounts()
-    {
-        string selectedId = (AccountCombo.SelectedItem as AccountItem)?.Id ?? ConfigStore.Load().DefaultAccount;
-
-        AccountCombo.Items.Clear();
-        var cfg = ConfigStore.Load();
-
-        if (cfg.Accounts.Count == 0)
-        {
-            cfg.Accounts["A1"] = "默认账号";
-            cfg.DefaultAccount = "A1";
-            ConfigStore.Save(cfg);
-        }
-
-        if (!string.IsNullOrEmpty(cfg.DefaultAccount) && cfg.Accounts.ContainsKey(cfg.DefaultAccount))
-            AccountCombo.Items.Add(new AccountItem
-            {
-                Id = cfg.DefaultAccount,
-                Remark = cfg.Accounts[cfg.DefaultAccount] + " ⭐",
-                Server = cfg.GetAccountServer(cfg.DefaultAccount)
-            });
-
-        foreach (var acc in cfg.Accounts)
-        {
-            if (acc.Key == cfg.DefaultAccount) continue;
-            AccountCombo.Items.Add(new AccountItem
-            {
-                Id = acc.Key,
-                Remark = acc.Value,
-                Server = cfg.GetAccountServer(acc.Key)
-            });
-        }
-
-        for (int i = 0; i < AccountCombo.Items.Count; i++)
-        {
-            if (AccountCombo.Items[i] is AccountItem item && item.Id == selectedId)
-            {
-                AccountCombo.SelectedIndex = i;
-                return;
-            }
-        }
-        if (AccountCombo.Items.Count > 0)
-            AccountCombo.SelectedIndex = 0;
     }
 
     private void RefreshGameDir()
@@ -167,15 +121,11 @@ public partial class MainWindow : HandyControl.Controls.Window
             RefreshGameDir();
         }
 
-        // 所选账号与所点按钮的服一致时才恢复该账号登录，不一致则保留当前登录
-        var account = AccountCombo.SelectedItem as AccountItem;
+        // 弹窗选择本次启动使用的账号（取消则不启动）
         string serverName = isOfficial ? "官服" : "B服";
-
-        if (account != null && account.IsBilibili == isOfficial)
-        {
-            Growl.Warning($"所选账号「{account.Remark.TrimEnd('⭐')}」属于{account.ServerLabel}，本次启动{serverName}将保留当前登录", GrowlToken);
-            account = null;
-        }
+        var picker = new AccountPickerWindow(isOfficial, ConfigStore.Load().DefaultAccount) { Owner = this };
+        if (picker.ShowDialog() != true) return;
+        var account = picker.SelectedAccount; // null = 保留当前登录
 
         bool ok = await LaunchProgressWindow.RunAsync($"正在启动{serverName}…", async status =>
         {
@@ -270,6 +220,5 @@ public partial class MainWindow : HandyControl.Controls.Window
     private void ManageAccounts_Click(object sender, RoutedEventArgs e)
     {
         new AccountManagerWindow { Owner = this }.ShowDialog();
-        LoadAccounts();
     }
 }

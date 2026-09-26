@@ -130,6 +130,12 @@ public partial class App : Application
             await Task.Delay(500);
             await ShotWindowAsync(accounts, Path.Combine(dir, "accounts.png"));
             accounts.Close();
+
+            var picker = new AccountPickerWindow(true, null);
+            picker.Show();
+            await Task.Delay(400);
+            await ShotWindowAsync(picker, Path.Combine(dir, "picker.png"));
+            picker.Close();
         }
         catch (Exception ex)
         {
