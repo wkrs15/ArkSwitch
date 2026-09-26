@@ -1,0 +1,14 @@
+# 构建产物
+bin/
+obj/
+publish/
+
+# 游戏资源：切服文件由软件运行时从官方 CDN 自动下载，仓库不含
+load/
+
+# IDE / 临时文件
+.vs/
+.idea/
+*.user
+*.suo
+*.log

@@ -1,0 +1,102 @@
+<hc:Window x:Class="ArkSwitch.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        Style="{StaticResource WindowWin10}"
+        Title="ArkSwitch · 方舟切服 / 账号切换"
+        Width="440" Height="250"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Microsoft YaHei UI">
+
+    <Window.Resources>
+        <!-- 服务器卡片按钮 -->
+        <Style x:Key="CardButton" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource SecondaryBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource SecondaryRegionBrush}"/>
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource ThirdlyRegionBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.45"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!-- 通知容器放在独立覆盖层，不参与内容布局，避免弹出通知时挤压界面 -->
+    <Grid>
+        <Grid Margin="16,10,16,14">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- 账号选择 + 管理 -->
+            <DockPanel Grid.Row="0">
+            <Button DockPanel.Dock="Right" Content="账号管理" Width="88" Height="30"
+                    Click="ManageAccounts_Click"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="官服账号" VerticalAlignment="Center" Margin="2,0,0,0"/>
+                <ComboBox x:Name="AccountCombo" Width="220" Margin="14,0,0,0"
+                          VerticalAlignment="Center"/>
+            </StackPanel>
+        </DockPanel>
+
+        <!-- 游戏目录 -->
+        <DockPanel Grid.Row="1" Margin="0,12,0,0">
+            <Button DockPanel.Dock="Right" Content="浏览..." Width="64" Height="28"
+                    Click="BrowseGameDir_Click"/>
+            <TextBlock DockPanel.Dock="Left" Text="游戏目录" VerticalAlignment="Center" Margin="2,0,0,0"/>
+            <TextBox x:Name="GameDirBox" IsReadOnly="True" Height="28" Margin="12,0,0,0"
+                     VerticalContentAlignment="Center" FontSize="11.5"
+                     hc:InfoElement.Placeholder="未设置，启动游戏时会自动选择"/>
+        </DockPanel>
+
+        <!-- 双服启动 -->
+        <UniformGrid Grid.Row="2" Columns="2" Margin="0,12,0,0">
+            <Button x:Name="OfficialBtn" Style="{StaticResource CardButton}" Height="58"
+                    Margin="0,0,6,0" Click="OfficialBtn_Click">
+                <TextBlock Text="启动官服" FontSize="16" FontWeight="Bold"
+                           Foreground="{DynamicResource PrimaryTextBrush}"/>
+            </Button>
+            <Button x:Name="BilibiliBtn" Style="{StaticResource CardButton}" Height="58"
+                    Margin="6,0,0,0" Click="BilibiliBtn_Click">
+                <TextBlock Text="启动B服" FontSize="16" FontWeight="Bold"
+                           Foreground="{DynamicResource PrimaryTextBrush}"/>
+            </Button>
+        </UniformGrid>
+
+        <!-- 从官方 CDN 更新切服文件 -->
+        <Button x:Name="UpdatePayloadBtn" Grid.Row="3" Content="更新切服文件（官方 CDN）"
+                Height="30" Margin="0,12,0,0" Click="UpdatePayload_Click"/>
+        </Grid>
+
+        <StackPanel hc:Growl.GrowlParent="True" hc:Growl.Token="ArkSwitchMain"
+                    HorizontalAlignment="Right" VerticalAlignment="Top"
+                    Margin="0,34,8,0" Panel.ZIndex="100"/>
+    </Grid>
+</hc:Window>
