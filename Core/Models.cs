@@ -41,11 +41,14 @@ public static class ConfigStore
     private static readonly string LegacyDir = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ArknightsLauncher");
 
-    public static readonly string ConfigDir = Path.Combine(
+    /// <summary>测试钩子：重定向配置目录（仅自动化测试使用）。</summary>
+    internal static string? ConfigDirForTest;
+
+    public static string ConfigDir => ConfigDirForTest ?? Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ArkSwitch");
 
-    public static readonly string ConfigFile = Path.Combine(ConfigDir, "config.json");
-    public static readonly string AccountBackupDir = Path.Combine(ConfigDir, "AccountBackups");
+    public static string ConfigFile => Path.Combine(ConfigDir, "config.json");
+    public static string AccountBackupDir => Path.Combine(ConfigDir, "AccountBackups");
 
     private static readonly JsonSerializerOptions JsonOpts = new() { WriteIndented = true };
 

@@ -42,6 +42,8 @@ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=
 
 **仓库与构建产物不包含任何游戏资源**（`load/` 切服文件），用户首次运行时由软件从官方 CDN 自动下载。产物为单个 `ArkSwitch.exe`（自包含 .NET 运行时，无需安装）。
 
+核心逻辑有自动化测试（`tests/ArkSwitch.Tests`，使用临时目录沙箱，CI 自动执行）；本地可跑 `dotnet run --project tests/ArkSwitch.Tests -- --real` 做真机数据的**非破坏性**验证（备份 → MD5 校验 → 恒等恢复）。
+
 ### GitHub Actions
 
 仓库内置 `.github/workflows/build.yml`：

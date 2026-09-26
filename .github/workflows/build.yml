@@ -22,6 +22,10 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      # 核心逻辑测试（账号备份/切换、配置、切服文件复制），全部使用临时目录
+      - name: Run core tests
+        run: dotnet run --project tests/ArkSwitch.Tests -c Release -- --fake
+
       # 仓库不含游戏资源（load/），构建产物同样不含；
       # 用户首次运行时由软件从官方 CDN 自动下载切服文件
       - name: Publish

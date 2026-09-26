@@ -9,8 +9,11 @@ namespace ArkSwitch.Core;
 /// </summary>
 public static class AccountStore
 {
+    /// <summary>测试钩子：重定向游戏 sdk 数据根目录（仅自动化测试使用）。</summary>
+    internal static string? SdkRootForTest;
+
     public static string GetArknightsSdkRoot()
-        => Path.Combine(
+        => SdkRootForTest ?? Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
             "AppData", "LocalLow", "Hypergryph", "Arknights");
 
