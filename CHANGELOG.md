@@ -1,5 +1,11 @@
 # 更新日志
 
+## v1.7.0
+
+- 发布模式改为依赖框架（framework-dependent）：exe 从 69MB 缩小到 **2.1MB**
+- 需要安装 .NET 8 桌面运行时（缺失时 Windows 会弹窗引导下载）；`RollForward=LatestMajor`，已装 .NET 10 等更高版本运行时也可直接运行
+- 功能无任何变化；若想回到免安装的自包含模式，将 csproj 中 `SelfContained` 改为 `true` 重新发布
+
 ## v1.6.1
 
 - 减小发布体积：单文件发布启用压缩，exe 从 163MB 降到 69MB

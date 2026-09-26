@@ -20,12 +20,13 @@
 
 ## 使用
 
-1. 以管理员身份运行 `ArkSwitch.exe`（写游戏目录、硬链接、结束游戏进程需要）
-2. **首次运行会自动从官方 CDN 下载切服文件**（约 210MB，保存到 exe 旁的 `load` 目录；也可以点「更新切服文件」手动下载）
-3. 在主窗口「游戏目录」行浏览选择游戏根目录（需包含 `Arknights.exe`）
-4. 点击「启动官服 / 启动B服」→ 在弹窗中选择本次使用的账号 → 自动切服并启动游戏；软件启动时会自动检查并更新切服文件
-5. 账号：主窗口点「账号管理」→ 新增账号时选择所属服务器 → 先登录该账号并关闭游戏 → 列表选中槽位 → 「备份当前账号」；之后「切换到选中账号」会同时切换登录数据和服务器
-6. 若装有旧版 ArknightsLauncher，首次运行会自动迁移其配置与账号备份
+1. 安装 [.NET 8 桌面运行时](https://dotnet.microsoft.com/download/dotnet/8.0/runtime)（x64，选 "Desktop App"；已装更高版本如 .NET 10 的可直接运行）。未安装时启动软件 Windows 会弹窗引导下载，装一次即可
+2. 以管理员身份运行 `ArkSwitch.exe`（写游戏目录、硬链接、结束游戏进程需要）
+3. **首次运行会自动从官方 CDN 下载切服文件**（约 210MB，保存到 exe 旁的 `load` 目录；也可以点「更新切服文件」手动下载）
+4. 在主窗口「游戏目录」行浏览选择游戏根目录（需包含 `Arknights.exe`）
+5. 点击「启动官服 / 启动B服」→ 在弹窗中选择本次使用的账号 → 自动切服并启动游戏；软件启动时会自动检查并更新切服文件
+6. 账号：主窗口点「账号管理」→ 新增账号时选择所属服务器 → 先登录该账号并关闭游戏 → 列表选中槽位 → 「备份当前账号」；之后「切换到选中账号」会同时切换登录数据和服务器
+7. 若装有旧版 ArknightsLauncher，首次运行会自动迁移其配置与账号备份
 
 - 配置文件：`%LOCALAPPDATA%\ArkSwitch\config.json`
 - 账号备份：`%LOCALAPPDATA%\ArkSwitch\AccountBackups`
@@ -37,10 +38,12 @@
 
 ```bash
 dotnet build -c Debug    # 调试版（asInvoker，不弹 UAC）
-dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
+dotnet publish -c Release -r win-x64 --self-contained false
 ```
 
-**仓库与构建产物不包含任何游戏资源**（`load/` 切服文件），用户首次运行时由软件从官方 CDN 自动下载。产物为单个 `ArkSwitch.exe`（自包含 .NET 运行时，无需安装）。
+**仓库与构建产物不包含任何游戏资源**（`load/` 切服文件），用户首次运行时由软件从官方 CDN 自动下载。
+
+发布采用**依赖框架**模式：产物为单个 `ArkSwitch.exe`（约 2MB），要求用户已安装 [.NET 8 桌面运行时](https://dotnet.microsoft.com/download/dotnet/8.0/runtime)（缺失时 Windows 会弹窗引导下载；`RollForward=LatestMajor` 允许直接使用更高版本的运行时）。若想改回免安装的自包含模式，把 csproj 中 `SelfContained` 改为 `true` 重新发布即可（exe 约 160MB）。
 
 核心逻辑有自动化测试（`tests/ArkSwitch.Tests`，使用临时目录沙箱，CI 自动执行）；本地可跑 `dotnet run --project tests/ArkSwitch.Tests -- --real` 做真机数据的**非破坏性**验证（备份 → MD5 校验 → 恒等恢复）。
 

@@ -29,7 +29,7 @@ jobs:
       # 仓库不含游戏资源（load/），构建产物同样不含；
       # 用户首次运行时由软件从官方 CDN 自动下载切服文件
       - name: Publish
-        run: dotnet publish ArkSwitch.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:PublishDir=publish
+        run: dotnet publish ArkSwitch.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -p:PublishDir=publish
 
       - name: Package
         shell: pwsh
