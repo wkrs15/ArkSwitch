@@ -81,12 +81,22 @@ public partial class MainWindow : HandyControl.Controls.Window
         }
 
         if (!string.IsNullOrEmpty(cfg.DefaultAccount) && cfg.Accounts.ContainsKey(cfg.DefaultAccount))
-            AccountCombo.Items.Add(new AccountItem { Id = cfg.DefaultAccount, Remark = cfg.Accounts[cfg.DefaultAccount] + " ⭐" });
+            AccountCombo.Items.Add(new AccountItem
+            {
+                Id = cfg.DefaultAccount,
+                Remark = cfg.Accounts[cfg.DefaultAccount] + " ⭐",
+                Server = cfg.GetAccountServer(cfg.DefaultAccount)
+            });
 
         foreach (var acc in cfg.Accounts)
         {
             if (acc.Key == cfg.DefaultAccount) continue;
-            AccountCombo.Items.Add(new AccountItem { Id = acc.Key, Remark = acc.Value });
+            AccountCombo.Items.Add(new AccountItem
+            {
+                Id = acc.Key,
+                Remark = acc.Value,
+                Server = cfg.GetAccountServer(acc.Key)
+            });
         }
 
         for (int i = 0; i < AccountCombo.Items.Count; i++)
@@ -157,17 +167,19 @@ public partial class MainWindow : HandyControl.Controls.Window
             RefreshGameDir();
         }
 
-        var account = isOfficial ? AccountCombo.SelectedItem as AccountItem : null;
-        if (isOfficial && account == null)
+        // 所选账号与所点按钮的服一致时才恢复该账号登录，不一致则保留当前登录
+        var account = AccountCombo.SelectedItem as AccountItem;
+        string serverName = isOfficial ? "官服" : "B服";
+
+        if (account != null && account.IsBilibili == isOfficial)
         {
-            Growl.Warning("请先选择一个官服账号", GrowlToken);
-            return;
+            Growl.Warning($"所选账号「{account.Remark.TrimEnd('⭐')}」属于{account.ServerLabel}，本次启动{serverName}将保留当前登录", GrowlToken);
+            account = null;
         }
 
-        string serverName = isOfficial ? "官服" : "B服";
         bool ok = await LaunchProgressWindow.RunAsync($"正在启动{serverName}…", async status =>
         {
-            if (isOfficial && account != null)
+            if (account != null)
             {
                 status($"正在准备账号「{account.Remark.TrimEnd('⭐')}」…");
                 string? warning = await AccountStore.RestoreForLaunchAsync(account.Id);
@@ -238,7 +250,7 @@ public partial class MainWindow : HandyControl.Controls.Window
         }
     }
 
-    private static string? SelectGameRootDialog()
+    internal static string? SelectGameRootDialog()
     {
         while (true)
         {

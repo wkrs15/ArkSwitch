@@ -60,7 +60,7 @@
             <Button DockPanel.Dock="Right" Content="账号管理" Width="88" Height="30"
                     Click="ManageAccounts_Click"/>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock Text="官服账号" VerticalAlignment="Center" Margin="2,0,0,0"/>
+                <TextBlock Text="账号" VerticalAlignment="Center" Margin="2,0,0,0"/>
                 <ComboBox x:Name="AccountCombo" Width="220" Margin="14,0,0,0"
                           VerticalAlignment="Center"/>
             </StackPanel>

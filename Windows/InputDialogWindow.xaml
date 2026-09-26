@@ -13,6 +13,12 @@
                    Foreground="{DynamicResource PrimaryTextBrush}"/>
         <TextBox x:Name="InputBox" Height="30" Margin="0,12,0,0" VerticalContentAlignment="Center"
                  KeyDown="InputBox_KeyDown"/>
+        <StackPanel x:Name="ServerPanel" Orientation="Horizontal" Margin="0,12,0,0" Visibility="Collapsed">
+            <TextBlock Text="所属服务器" VerticalAlignment="Center"
+                       Foreground="{DynamicResource PrimaryTextBrush}"/>
+            <ComboBox x:Name="ServerCombo" Width="140" Margin="12,0,0,0"
+                      VerticalAlignment="Center"/>
+        </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
             <Button Content="确定" Width="80" Height="30" Click="Ok_Click"/>
             <Button Content="取消" Width="80" Height="30" Margin="12,0,0,0" Click="Cancel_Click"/>

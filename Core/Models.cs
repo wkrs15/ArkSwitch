@@ -7,19 +7,33 @@ public class AppConfig
 {
     public string RootPath { get; set; } = "";                          // 方舟根目录路径（含 Arknights.exe）
     public Dictionary<string, string> Accounts { get; set; } = new();   // 账号 ID -> 备注
+    public Dictionary<string, string> AccountServers { get; set; } = new(); // 账号 ID -> 所属服务器（Official/Bilibili）
     public string DefaultAccount { get; set; } = "";                    // 默认账号 ID（如 "A1"）
+
+    public string GetAccountServer(string accountId)
+        => AccountServers.TryGetValue(accountId, out var server) && server == "Bilibili"
+            ? "Bilibili"
+            : "Official";
+
+    public void SetAccountServer(string accountId, string server)
+        => AccountServers[accountId] = server == "Bilibili" ? "Bilibili" : "Official";
 }
 
 public class AccountItem
 {
     public string Id { get; set; } = "";
     public string Remark { get; set; } = "";
-    public override string ToString() => Remark;
+    public string Server { get; set; } = "Official";   // "Official" / "Bilibili"
+
+    public bool IsBilibili => Server == "Bilibili";
+    public string ServerLabel => IsBilibili ? "B服" : "官服";
+
+    public override string ToString() => $"{Remark} [{ServerLabel}]";
 }
 
 public static class AppVersion
 {
-    public static readonly Version Current = new("1.1.0.0");
+    public static readonly Version Current = new("1.5.0.0");
 }
 
 public static class ConfigStore
