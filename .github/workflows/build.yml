@@ -31,18 +31,20 @@ jobs:
       - name: Publish
         run: dotnet publish ArkSwitch.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -p:PublishDir=publish
 
+      # 产物本身是单文件 exe（依赖框架模式仅约 2MB），无需再打包 zip，
+      # 直接改名为带版本号的文件名作为 Release 附件上传
       - name: Package
         shell: pwsh
         run: |
           if ($env:GITHUB_REF_TYPE -eq 'tag') { $v = $env:GITHUB_REF_NAME } else { $v = "dev-$($env:GITHUB_SHA.Substring(0,7))" }
-          Compress-Archive -Path "publish/ArkSwitch.exe" -DestinationPath "ArkSwitch-$v-win-x64.zip"
-          "ZIP_NAME=ArkSwitch-$v-win-x64.zip" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Copy-Item "publish/ArkSwitch.exe" "ArkSwitch-$v-win-x64.exe"
+          "ASSET=ArkSwitch-$v-win-x64.exe" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: ArkSwitch-win-x64
-          path: ${{ env.ZIP_NAME }}
+          path: ${{ env.ASSET }}
           if-no-files-found: error
 
       - name: Create GitHub Release
@@ -62,7 +64,7 @@ jobs:
             }
           }
           if (Test-Path $notes) {
-            gh release create "$tag" "$env:ZIP_NAME" --title "ArkSwitch $tag" --notes-file $notes
+            gh release create "$tag" "$env:ASSET" --title "ArkSwitch $tag" --notes-file $notes
           } else {
-            gh release create "$tag" "$env:ZIP_NAME" --title "ArkSwitch $tag" --generate-notes
+            gh release create "$tag" "$env:ASSET" --title "ArkSwitch $tag" --generate-notes
           }

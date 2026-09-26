@@ -51,8 +51,8 @@ dotnet publish -c Release -r win-x64 --self-contained false
 
 仓库内置 `.github/workflows/build.yml`：
 
-- push 到 `master` / `main`、提交 PR 或手动触发时：自动构建并上传 zip artifact
-- 推送 `v*` 标签（如 `v1.4.0`）时：自动创建 GitHub Release 并附上 `ArkSwitch-<版本>-win-x64.zip`
+- push 到 `master` / `main`、提交 PR 或手动触发时：自动构建并上传 artifact
+- 推送 `v*` 标签（如 `v1.4.0`）时：自动创建 GitHub Release 并附上单文件 `ArkSwitch-<版本>-win-x64.exe`（依赖框架模式产物仅约 2MB，不再打包 zip）
 
 开发辅助参数：`--devshot <目录>` 输出窗口截图；`--dump-api <文件>` 导出 HandyControls API 与主题资源键；`--update-payload <日志>` 实际执行一次切服文件更新（用于测试）。
 
