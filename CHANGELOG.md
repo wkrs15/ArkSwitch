@@ -1,5 +1,9 @@
 # 更新日志
 
+## v1.7.1
+
+- 更换应用图标为新的 arkswitch Logo（蓝色 A + 切换箭头）
+
 ## v1.7.0
 
 - 发布模式改为依赖框架（framework-dependent）：exe 从 69MB 缩小到 **2.1MB**
