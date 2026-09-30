@@ -33,7 +33,9 @@ public class AccountItem
 
 public static class AppVersion
 {
-    public static readonly Version Current = new("1.5.0.0");
+    /// <summary>当前版本号，直接取程序集版本（即 csproj 的 &lt;Version&gt;），避免与发布版本脱节。</summary>
+    public static readonly Version Current =
+        typeof(AppVersion).Assembly.GetName().Version ?? new Version(0, 0, 0, 0);
 }
 
 public static class ConfigStore
@@ -42,7 +44,7 @@ public static class ConfigStore
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ArknightsLauncher");
 
     /// <summary>测试钩子：重定向配置目录（仅自动化测试使用）。</summary>
-    internal static string? ConfigDirForTest;
+    internal static string? ConfigDirForTest { get; set; }
 
     public static string ConfigDir => ConfigDirForTest ?? Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ArkSwitch");

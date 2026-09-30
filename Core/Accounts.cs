@@ -10,7 +10,7 @@ namespace ArkSwitch.Core;
 public static class AccountStore
 {
     /// <summary>测试钩子：重定向游戏 sdk 数据根目录（仅自动化测试使用）。</summary>
-    internal static string? SdkRootForTest;
+    internal static string? SdkRootForTest { get; set; }
 
     public static string GetArknightsSdkRoot()
         => SdkRootForTest ?? Path.Combine(
@@ -29,14 +29,8 @@ public static class AccountStore
         => Process.GetProcessesByName("Arknights").Length > 0
            || Process.GetProcessesByName("PlatformProcess").Length > 0;
 
-    public static void KillGameProcesses()
-    {
-        foreach (var proc in Process.GetProcessesByName("Arknights").Concat(Process.GetProcessesByName("PlatformProcess")))
-        {
-            proc.Kill();
-            proc.WaitForExit();
-        }
-    }
+    /// <summary>结束游戏与平台进程（与启动流程共用同一实现）。</summary>
+    public static void KillGameProcesses() => GameLauncher.KillArknightsProcesses();
 
     /// <summary>把当前登录的 sdk_data_* 备份到指定账号槽位。返回是否备份成功。</summary>
     public static async Task<bool> BackupCurrentAsync(string accountId)

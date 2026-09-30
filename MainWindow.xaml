@@ -1,3 +1,6 @@
+<!-- 注意：这里必须用 CanMinimize。HandyControls 的 WindowWin10 模板在 ResizeMode=NoResize 时
+     会把最小化按钮（ButtonMin）一并隐藏，窗口就只剩关闭按钮；CanMinimize 既保留最小化，
+     又保持窗口不可缩放、不出现最大化按钮。 -->
 <hc:Window x:Class="ArkSwitch.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -5,7 +8,7 @@
         Style="{StaticResource WindowWin10}"
         Title="ArkSwitch · 方舟切服 / 账号切换"
         Width="440" Height="205"
-        ResizeMode="NoResize"
+        ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
         FontFamily="Microsoft YaHei UI">
 

@@ -175,14 +175,14 @@ public static class PayloadUpdater
         {
             WriteState(profile, version, selectedFiles.Count, selectedFiles.Sum(x => x.Size));
             return new UpdateResult { Version = version, FileCount = selectedFiles.Count, AlreadyCurrent = false };
-        }        var stagingDirectory = Path.Combine(PayloadRoot, ".staging", profile.PayloadDirectoryName + "-" + Guid.NewGuid().ToString("N"));
+        }
+
+        var stagingDirectory = Path.Combine(PayloadRoot, ".staging", profile.PayloadDirectoryName + "-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(stagingDirectory);
 
         try
         {
             long downloadedBytes = 0;
-            int downloadedCount = 0;
-            var downloadFiles = selectedFiles.Where(x => !seeds.ContainsKey(x.RelativePath)).ToList();
 
             foreach (var (node, index) in selectedFiles.Select((x, i) => (x, i)))
             {
@@ -197,7 +197,6 @@ public static class PayloadUpdater
                     continue;
                 }
 
-                downloadedCount++;
                 var startBytes = downloadedBytes;
                 var lastReportAt = Environment.TickCount64;
                 await DownloadFileAsync(

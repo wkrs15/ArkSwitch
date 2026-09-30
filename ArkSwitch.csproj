@@ -10,8 +10,8 @@
 		<AssemblyName>ArkSwitch</AssemblyName>
 		<AssemblyTitle>ArkSwitch - 明日方舟切服/账号切换</AssemblyTitle>
 		<Product>ArkSwitch</Product>
-		<Version>1.7.1.0</Version>
-		<FileVersion>1.7.1.0</FileVersion>
+		<Version>1.7.2.0</Version>
+		<FileVersion>1.7.2.0</FileVersion>
 		<Copyright>基于 lTinchl/ArknightsLauncher (MIT) 重写</Copyright>
 		<!-- Debug 用 asInvoker 清单方便开发调试，Release 要求管理员（写游戏目录/硬链接/结束进程需要） -->
 		<ApplicationManifest Condition="'$(Configuration)' == 'Debug'">app.dev.manifest</ApplicationManifest>

@@ -100,15 +100,6 @@ public partial class MainWindow : HandyControl.Controls.Window
 
         var cfg = ConfigStore.Load();
 
-        try
-        {
-            GameLauncher.KillArknightsProcesses();
-        }
-        catch (Exception ex)
-        {
-            Growl.Warning("关闭 Arknights 进程时出错：" + ex.Message, GrowlToken);
-        }
-
         string rootPath = cfg.RootPath;
         if (!GameLauncher.IsValidRootPath(rootPath))
         {
@@ -126,6 +117,16 @@ public partial class MainWindow : HandyControl.Controls.Window
         var picker = new AccountPickerWindow(isOfficial, ConfigStore.Load().DefaultAccount) { Owner = this };
         if (picker.ShowDialog() != true) return;
         var account = picker.SelectedAccount; // null = 保留当前登录
+
+        // 确认要启动之后再结束正在运行的游戏：用户在选择账号时取消，不应该把游戏关掉
+        try
+        {
+            GameLauncher.KillArknightsProcesses();
+        }
+        catch (Exception ex)
+        {
+            Growl.Warning("关闭 Arknights 进程时出错：" + ex.Message, GrowlToken);
+        }
 
         bool ok = await LaunchProgressWindow.RunAsync($"正在启动{serverName}…", async status =>
         {

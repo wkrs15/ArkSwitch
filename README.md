@@ -2,7 +2,7 @@
 
 明日方舟 PC 端**官服 / B服 双服切换 + 多账号切换备份**小工具。基于 [lTinchl/ArknightsLauncher](https://github.com/lTinchl/ArknightsLauncher)（MIT）重写，使用 **WPF + [HandyControls](https://github.com/ghost1372/HandyControls)**，仅保留核心功能，界面紧凑。
 
-> 说明：软件内不使用任何明日方舟 / 鹰角 / B 站官方素材（图标为自行生成）。仅更新切服文件时访问鹰角官方启动器 API 与官方 CDN（含启动时的自动检查，无更新时零下载），且所有下载均经 MD5 校验。
+> 说明：软件内不使用任何明日方舟 / 鹰角 / B 站官方素材（图标为自制素材）。仅更新切服文件时访问鹰角官方启动器 API 与官方 CDN（含启动时的自动检查，无更新时零下载），且所有下载均经 MD5 校验。
 
 ## 功能
 
@@ -66,7 +66,9 @@ dotnet publish -c Release -r win-x64 --self-contained false
 │   ├── ServerSwitcher.cs  # 切服（硬链接优先）+ 游戏启动/进程管理
 │   └── Accounts.cs        # sdk_data 备份/恢复
 ├── Windows/               # 账号管理弹窗、启动进度窗、输入对话框
-├── Assets/app.ico         # 自绘中性图标（tools/make_icon.ps1 生成）
+├── Assets/
+│   ├── app-icon.png       # 图标源图（512×512，仅存于仓库，不打包进 exe）
+│   └── app.ico            # 多尺寸图标（tools/make_icon.ps1 由源图生成）
 └── load/                  # 运行时由软件从官方 CDN 自动下载生成（仓库与构建产物不含）
 ```
 
